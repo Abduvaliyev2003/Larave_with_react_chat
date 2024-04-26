@@ -1,3 +1,4 @@
+import ConversationItem from "@/Components/App/ConversationItem";
 import TextInput from "@/Components/TextInput";
 import { usePage } from "@inertiajs/react";
 import Echo from "laravel-echo";
