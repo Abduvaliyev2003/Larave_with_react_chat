@@ -68,7 +68,7 @@ class User extends Authenticatable
             $join->on('conversations.user_id1', '=', 'users.id')
                  ->where('conversations.user_id2', '=', $userId)
                  ->orWhere(function ($query) use ($userId) {
-                    $query->on('conversations.user_id2', '=', 'users.if')
+                    $query->on('conversations.user_id2', '=', 'users.id')
                          ->where('conversations.user_id2', '=', $userId);
                  });
           })
