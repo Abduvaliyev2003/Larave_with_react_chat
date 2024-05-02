@@ -132,7 +132,7 @@ import { useEvent } from "@/Event";
     return (
         <>
            <div  className="flex-1 w-full flex overflow-hidden ">
-           <div className={`translate-all w-full sm:w-[220px] md:w-[300px] bg-slate-800 flex flex-col overflow-y-auto h-screen ${selectedConversation ? '-ml-[100%] sm:ml-0' : ''}`}>
+           <div className={`translate-all w-full sm:w-[220px] md:w-[300px] bg-slate-800 flex flex-col overflow-hidden ${selectedConversation ? '-ml-[100%] sm:ml-0' : ''}`}>
     <div className="flex items-center justify-between py-2 px-3 text-xl font-medium">
         My conversations
         <div className="tooltip tooltip-left">
