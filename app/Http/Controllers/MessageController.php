@@ -104,7 +104,7 @@ class MessageController extends Controller
 
        SocketMessage::dispatch($message);
 
-       return MessageResource::collection($message);
+       return new MessageResource($message);
     }
 
     public function destroy(Message $message)

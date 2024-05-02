@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Echo from "laravel-echo";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useEvent } from "@/Event";
 
 
 
@@ -17,7 +18,7 @@ import { useEffect } from "react";
     const [localConversations, setLocalConversations] = useState([]);
     const [sortedConversations, setSortedConversations] = useState([]);
     const [onlineUsers, setOnlineUsers] = useState({});
-
+    const {on} = useEvent();
     const isUserOnline = (userId) => onlineUsers[userId];
 
     const onSearch = (e) => {
@@ -31,6 +32,39 @@ import { useEffect } from "react";
             })
         )
     }
+    const messageCreated = (message) =>
+    {
+        setLocalConversations((oldUsers) => {
+            return oldUsers.map((us) => {
+                if(
+                    message.receiver_id &&
+                    !us.is_group &&
+                    (us.id == message.sender_id || us.id == message.receiver_id)
+                ) {
+                     us.last_message = message.message;
+                     us.last_message_date = message.created_at;
+                     return us;
+                }
+                if(
+                    message.group_id &&
+                    us.is_group &&
+                    us.id == message.group_id_id
+                ) {
+                    us.last_message = message.message;
+                    us.last_message_date = message.created_at;
+                    return us;
+                }
+                return us;
+            })
+        })
+    }
+
+    useEffect(() => {
+        const offCreated = on('message.created', messageCreated);
+        return () => {
+            offCreated();
+        }
+    }, [on]);
 
     useEffect(() => {
          setSortedConversations(
@@ -56,9 +90,11 @@ import { useEffect } from "react";
             })
          );
      }, [localConversations]);
+
     useEffect(() => {
        setLocalConversations(conversations)
     }, [conversations]);
+
     useEffect(() => {
         window.Echo.join('online')
             .here((users) => {
@@ -95,45 +131,36 @@ import { useEffect } from "react";
 
     return (
         <>
-           <div  className="flex-1 w-full flex overflow-hidden">
-            <div
-                className={`translate-all w-full sm:w-[220px] md:w-[300px] bg-slate-800 flex flex-col overflow-hidden
-                ${selectedConversation ? '-ml-[100%] sm:ml-0' : ''}`}
-            >
-                <div
-                   className={`flex items-center justify-between py-2 px-3 text-xl font-medium`}
-                   >
-                   My conversations
-                   <div className="tooltip tooltip-left">
-                      <button
-                           className="text-gray-400 hover:text-gray-200"
-                        >
-                           <PencilSquareIcon className="w-4 h-4 inline-block ml-2" />
-                      </button>
-
-                   </div>
-                </div>
-                <div className="p-3">
-                     <TextInput
-                        onKeyUp={onSearch}
-                        placeholder="Filter users and groups"
-                        className="w-full"
-                     />
-                </div>
-                <div className="flex-1  overflow-hidden">
-                {
-    sortedConversations && sortedConversations?.map((conversation) => (
-        <ConversationItem
-            key={`${conversation.is_group ? "group" : 'user'} ${conversation.id}`}
-            conversations={conversation}
-            online={!!isUserOnline(conversation.id)}
-            selectedConversation={selectedConversation}
+           <div  className="flex-1 w-full flex overflow-hidden ">
+           <div className={`translate-all w-full sm:w-[220px] md:w-[300px] bg-slate-800 flex flex-col overflow-y-auto h-screen ${selectedConversation ? '-ml-[100%] sm:ml-0' : ''}`}>
+    <div className="flex items-center justify-between py-2 px-3 text-xl font-medium">
+        My conversations
+        <div className="tooltip tooltip-left">
+            <button className="text-gray-400 hover:text-gray-200">
+                <PencilSquareIcon className="w-4 h-4 inline-block ml-2" />
+            </button>
+        </div>
+    </div>
+    <div className="p-3">
+        <TextInput
+            onKeyUp={onSearch}
+            placeholder="Filter users and groups"
+            className="w-full"
         />
-    ))
-}
+    </div>
+    <div className="flex-1 overflow-hidden">
+        {sortedConversations &&
+            sortedConversations?.map((conversation) => (
+                <ConversationItem
+                    key={`${conversation.is_group ? "group" : "user"} ${conversation.id}`}
+                    conversations={conversation}
+                    online={!!isUserOnline(conversation.id)}
+                    selectedConversation={selectedConversation}
+                />
+            ))}
+    </div>
+</div>
 
-                </div>
-            </div>
              <div className="dark:bg-slate-900 flex-1 flex flex-col overflow-hidden">
                 {children}
             </div>

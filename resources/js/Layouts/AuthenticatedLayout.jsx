@@ -5,13 +5,66 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 
+import { useEvent } from '@/Event';
+
 export default function Authenticated({header, children }) {
     const page = usePage();
     const user = page.props.auth.user;
+    const  conversations = page.props.conversations;
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-    // useEffect(() => {
-    //     console.log('auth');
-    // }, []);
+    const {emit} = useEvent();
+    useEffect(() => {
+        conversations?.forEach((conversation) => {
+            let channel = `message.group.${conversation.id}`
+            if(conversation.is_user)
+            {
+                channel = `message.user.${[
+                    parseInt(user.id),
+                    parseInt(conversation.id)
+                ].sort((a,b) => a - b)
+                 .join('-')}`;
+            }
+           window.Echo.private(channel)
+                 .error((error) => {
+                    console.error(error);
+                 })
+                 .listen("SocketMessage", (e) => {
+                       console.log(e);
+                       const message = e.message;
+
+                       emit("message.created", message);
+                       if(message.sender_id === user.id){
+                           return;
+                       }
+
+                       emit('newMessageNotification', {
+                           user: message.sender,
+                           group_id: message.group_id,
+                           message:
+                               message.message || `Shared ${
+                                   message.attachments.lenght === 1
+                                        ? 'an attachment'
+                                        : message.attachments.lenght + " attachments"
+                               }`,
+                       })
+                 });
+        });
+
+        return () => {
+             conversations.forEach((conversation) => {
+                let channel = `message.group.${conversation.id}`
+                if(conversation.is_user)
+                {
+                    channel = `message.user.${[
+                        parseInt(user.id),
+                        parseInt(conversation.id)
+                    ].sort((a,b) => a - b)
+                     .join('-')}`;
+                }
+                window.Echo.leave(channel);
+             })
+        }
+    }, [conversations]);
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-slate-900 flex flex-col h-screen">
             <nav className="dark:bg-slate-800 border-b ">
