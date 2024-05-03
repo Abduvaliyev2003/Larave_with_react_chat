@@ -25,13 +25,13 @@ import { useEvent } from "@/Event";
         const search = e.target.value.toLowerCase();
         setLocalConversations(
             conversations.filter((conversation) => {
-                 return (
-                       conversation.name.toLowerCase().includes(search) ||
-                       conversation.email.toLowerCase().includes(search)
-                 );
+                return (
+                    (conversation.name?.toLowerCase().includes(search) || false) ||
+                    (conversation.email?.toLowerCase().includes(search) || false)
+                );
             })
-        )
-    }
+        );
+    };
     const messageCreated = (message) =>
     {
         setLocalConversations((oldUsers) => {
