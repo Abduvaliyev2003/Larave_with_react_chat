@@ -1,3 +1,4 @@
+import AttachmentPreviewModel from '@/Components/App/AttachmentPreviewModel';
 import ConversationHeader from '@/Components/App/ConversationHeader';
 import MessageInput from '@/Components/App/MessageInput';
 import MessageItem from '@/Components/App/MessageItem';
@@ -61,7 +62,7 @@ function Home({selectedConversation = null, messages = null}) {
               })
     }, [localMessages, noMoreMessages]);
 
-    const onAttachmentClick = (attachments, id) => {
+    const onAttachmentClick = (attachments, ind) => {
         setPreviewAttachment({
             attachments,
             ind,
@@ -147,7 +148,7 @@ function Home({selectedConversation = null, messages = null}) {
                                 <div ref={loadMoreIntersect}></div>
                                  {
                                     localMessages?.map((message) => (
-                                        <MessageItem key={message.id} message={message} />
+                                        <MessageItem key={message.id} message={message}  attachmentClick={onAttachmentClick} />
                                     ))
                                  }
                             </div>

@@ -68,6 +68,7 @@ class MessageController extends Controller
 
     public function  store(StoreMessageRequest $request)
     {
+
        $data = $request->validated();
        $data['sender_id'] = auth()->id();
        $reveiverId = $data['receiver_id'] ?? null;
@@ -86,10 +87,11 @@ class MessageController extends Controller
                $model = [
                    'message_id' => $message->id,
                    'name' => $file->getClientOriginalName(),
-                   'mime' => $file->getSize(),
-                   'path' => $file->store($directory, 'public')
+                   'mime' =>  $file->getClientMimeType(),
+                   'path' => $file->store($directory, 'public'),
+                   'size' =>  $file->getSize()
                ];
-               $attachment = MessageAttachment::create($model);
+               $attachment = MessageAttachment::query()->create($model);
                $attachments = $attachment;
            }
            $message->attachments = $attachments;

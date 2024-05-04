@@ -2,15 +2,18 @@ import { usePage } from "@inertiajs/react";
 import UserAvatar from "./UserAvatar";
 import ReactMarkdown from "react-markdown";
 import { formatMessageDateLong } from "@/helpers";
+import MessageAttachments from "./MessageAttachments";
 
 
 
 const MessageItem = ({message, attachmentClick} ) => {
     const currentUser = usePage().props.auth.user;
+   
     return (
         <div className={"chat " + (
               message.sender_id === currentUser.id ? "chat-end" : "chat-start"
         )}>
+
             {<UserAvatar user={message.sender} />}
             <div className="chat-header">
                 {
