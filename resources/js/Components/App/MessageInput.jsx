@@ -7,6 +7,7 @@ import EmojiPicker from "emoji-picker-react";
 import { isAudio, isImage } from "@/helpers";
 import AttachmentPreview from "./AttachmentPreview";
 import CustomAudioPlayer from "./CustomAudioPlayer";
+import AudioRecorder from "./AudioRecorder";
 
 
 
@@ -76,6 +77,19 @@ const MessageInput = ({conversation = null}) => {
             setInputErrorMessage(message || 'An error occurred while sending message')
         });
     }
+
+    const recordedAudioReady = (file,url) => {
+        setChosenFiles((prev) => {
+            return [
+                ...prev,
+                {
+                    file:file,
+                    url:url
+                }
+            ]
+        })
+    }
+
     return (
         <div className="flex flex-wrap items-start border-t border-slate-700 py-3">
              <div className="order-2 flex-1 xs:flex-none xs:order-1 p-2">
@@ -197,7 +211,7 @@ const MessageInput = ({conversation = null}) => {
                         </EmojiPicker>
                     </Popover.Panel>
                 </Popover>
-
+                <AudioRecorder fileReady={recordedAudioReady} />
                 {/* <button className="p-1 text-gray-400 hover:text-gray-300">
 
                 </button> */}

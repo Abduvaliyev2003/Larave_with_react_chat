@@ -17,13 +17,14 @@ const AttachmentPreviewModel = ({
     onClose = () => {},
 }) => {
     const [currentindex, setCurrentIndex] = useState(0);
-    const attachment = useMemo(() => {
-        return attachments[currentindex];
-    }, [attachments, currentindex]);
-    console.log(attachment);
+
     const previewableAttachments = useMemo(() => {
-        return attachment?.filter((attachment) => isPreviewable(attachment));
-    }, [attachment]);
+        return  isPreviewable(attachments);
+    }, [attachments]);
+
+    const attachment = useMemo(() => {
+        return previewableAttachments[currentindex];
+    }, [attachments, currentindex]);
 
     const close = () => {
         onClose();
