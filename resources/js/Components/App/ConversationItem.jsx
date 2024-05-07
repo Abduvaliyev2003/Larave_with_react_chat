@@ -49,7 +49,7 @@ const ConversationItem = ({conversations, online = null, selectedConversation = 
                 <UserAvatar user={conversations} online={online} />
             )
           }
-          {conversations.sis_group &&  <GroupAvatar />}
+          {conversations.is_group && ( <GroupAvatar />)}
 
           <div
             className={

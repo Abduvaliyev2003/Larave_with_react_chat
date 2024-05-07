@@ -32,10 +32,10 @@ class Conversation extends Model
     }
 
 
-    public static function getConversationsForSidebar(User $exceptUser)
+    public static function getConversationsForSidebar(User $user)
     {
-        $users = User::getUsersExceptUser($exceptUser);
-        $groups = Group::getGroupsForUser($exceptUser);
+        $users = User::getUsersExceptUser($user);
+        $groups = Group::getGroupsForUser($user);
 
         return $users->map(function (User $user){
             return $user->toConversationArray();

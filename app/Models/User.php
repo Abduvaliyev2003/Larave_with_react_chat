@@ -58,8 +58,7 @@ class User extends Authenticatable
     public static function getUsersExceptUser(User $exceptUser)
     {
         $userId = $exceptUser->id;
-        $query = User::select([
-            'users.*', 'messages.message as last_message', 'messages.created_at as last_message_date'
+        $query = User::select(['users.*', 'messages.message as last_message', 'messages.created_at as last_message_date'
         ])->where('users.id', '!=', $userId)
           ->when(!$exceptUser->is_admin, function ($query) {
                $query->whereNull('users.blocked_at');
