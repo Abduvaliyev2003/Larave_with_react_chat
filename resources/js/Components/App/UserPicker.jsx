@@ -1,5 +1,5 @@
 const { Combobox, Transition } = require("@headlessui/react");
-const { ChevronUpDownIcon } = require("@heroicons/react/24/solid");
+const { ChevronUpDownIcon, CheckIcon } = require("@heroicons/react/24/solid");
 const { useState, Fragment } = require("react")
 
 
@@ -15,7 +15,7 @@ const UserPicker = ({value, options, onSelect}) => {
                                         .replace(/\s+/g, "")
                                         .includes(query.toLowerCase().replace(/\s+/g, ''))
                           );
-    const onSelected = (persons) {
+    const onSelected = (persons)  => {
         setSelected(persons);
         onSelect(persons)
     }
@@ -76,9 +76,25 @@ const UserPicker = ({value, options, onSelect}) => {
                                            {({selected, active}) => (
                                             <>
                                                 <span
+                                                     className={`block truncate ${
+                                                        selected
+                                                                ?  "font-medium"
+                                                                :  "font-normal"
+                                                     }`}
                                                  >
-
+                                                     {person.name}
                                                 </span>
+                                                {selected ? (
+                                                    <span
+                                                    className={`absolute inset-y-0 left-0 flex items-center pl-3 text-white`}
+                                                    >
+                                                          <CheckIcon
+                                                               className="h-5 w-5 "
+                                                               aria-hidden="true"
+                                                           />
+                                                    </span>
+
+                                                ) :  null}
                                             </>
                                            )}
                                     </Combobox.Option>
@@ -89,6 +105,22 @@ const UserPicker = ({value, options, onSelect}) => {
                   </Transition>
                  </div>
             </Combobox>
+            {
+                selected && (
+                    <div className="flex gap-2 mt-3">
+                        {
+                            selected.map((person) => (
+                                <div
+                                  key={person.id}
+                                className="badge badge-primary gap-2">
+                                    {person.name}
+                                </div>
+                            ))
+                        }
+
+                    </div>
+                )
+            }
         </>
     )
 }

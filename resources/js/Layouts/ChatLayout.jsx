@@ -1,13 +1,12 @@
 
-import { usePage } from "@inertiajs/react";
+import { usePage} from "@inertiajs/react";
 import ConversationItem from "@/Components/App/ConversationItem";
 import TextInput from "@/Components/TextInput";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
-import PropTypes from 'prop-types';
-import Echo from "laravel-echo";
-import { useState } from "react";
-import { useEffect } from "react";
+
 import { useEvent } from "@/Event";
+import GroupModal from "@/Components/App/GroupModal";
+import { useEffect, useState } from "react";
 
 
 
@@ -18,6 +17,7 @@ import { useEvent } from "@/Event";
     const [localConversations, setLocalConversations] = useState([]);
     const [sortedConversations, setSortedConversations] = useState([]);
     const [onlineUsers, setOnlineUsers] = useState({});
+    const [showGroupModal, setShowGroupModal] = useState(false);
     const {on} = useEvent();
     const isUserOnline = (userId) => onlineUsers[userId];
 
@@ -136,7 +136,7 @@ import { useEvent } from "@/Event";
     <div className="flex items-center justify-between py-2 px-3 text-xl font-medium">
         My conversations
         <div className="tooltip tooltip-left">
-            <button className="text-gray-400 hover:text-gray-200">
+            <button onClick={e => setShowGroupModal(true)} className="text-gray-400 hover:text-gray-200">
                 <PencilSquareIcon className="w-4 h-4 inline-block ml-2" />
             </button>
         </div>
@@ -165,7 +165,7 @@ import { useEvent } from "@/Event";
                 {children}
             </div>
            </div>
-
+           <GroupModal show={showGroupModal} onClose={() => setShowGroupModal(false)} />
         </>
     );
 }

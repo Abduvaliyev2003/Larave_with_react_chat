@@ -133,7 +133,7 @@ const AttachmentPreviewModel = ({
                                                         <audio
                                                              src={attachment.url}
                                                              controls
-                                                             autoPlay
+                                                             
                                                         >
 
                                                         </audio>

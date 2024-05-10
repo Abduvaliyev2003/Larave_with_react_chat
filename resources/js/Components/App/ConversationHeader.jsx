@@ -5,10 +5,12 @@ import GroupAvatar from "./GroupAvatar";
 import GroupDescriptionPopover from "./GroupDescriptionPopover";
 import { useEvent } from "@/Event";
 import axios from "axios";
+import GroupUsersPopover from "./GroupUsersPopover";
 
 
 const ConversationHeader = ({selectedConversation}) => {
     const {emit} = useEvent();
+    const authUser = usePage().props.auth.user;
     const onDeleteGroup = () => {
         if (!window.confirm('Are you sure you want to delete this group?')){
            return;
