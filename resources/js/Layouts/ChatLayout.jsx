@@ -1,5 +1,5 @@
 
-import { usePage} from "@inertiajs/react";
+import { router, usePage} from "@inertiajs/react";
 import ConversationItem from "@/Components/App/ConversationItem";
 import TextInput from "@/Components/TextInput";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
@@ -61,8 +61,26 @@ import { useEffect, useState } from "react";
 
     useEffect(() => {
         const offCreated = on('message.created', messageCreated);
+        const offModalShow = on('GroupModal.show', (group) => {
+            setShowGroupModal(true);
+        })
+
+        const offGroupDelete = on('group.deleted',({id, name}) => {
+             setLocalConversations((oldCon) => {
+                return oldCon.filter((con) => con.id != id);
+             })
+
+             emit('toast.show', `Group ${name} was deleted`);
+
+             if(!selectedConversation || (selectedConversation.is_group && selectedConversation.id == id))
+            {
+               router.vist(route('dashboard'))
+            }
+        })
         return () => {
             offCreated();
+            offModalShow();
+            offGroupDelete();
         }
     }, [on]);
 

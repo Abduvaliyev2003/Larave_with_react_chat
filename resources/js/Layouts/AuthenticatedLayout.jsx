@@ -32,7 +32,7 @@ export default function Authenticated({ header, children }) {
                     console.error(error);
                 })
                 .listen("SocketMessage", (e) => {
-                  
+
                     const message = e.message;
 
                     emit("message.created", message);
@@ -53,6 +53,16 @@ export default function Authenticated({ header, children }) {
                             }`,
                     });
                 });
+
+            if(conversation.is_group) {
+                window.Echo.private(`group.deleted.${conversation.id}`)
+                      .listen("GroupDeleted", (e) => {
+                         emit('group.deleted', {id: e.id, name:e.name});
+                      })
+                      .error((e) => {
+                        console.error(e)
+                      })
+            }
         });
 
         return () => {
@@ -67,6 +77,9 @@ export default function Authenticated({ header, children }) {
                         .join("-")}`;
                 }
                 window.Echo.leave(channel);
+                if(conversation.is_group) {
+                    window.Echo.leave(`message.group.${conversation.id}`);
+                }
             });
         };
     }, [conversations]);

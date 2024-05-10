@@ -27,11 +27,12 @@ const ConversationItem = ({conversations, online = null, selectedConversation = 
            classes = " border-blue-500 bg-black/20";
       }
    }
+
    return (
        <Link
           href={
               conversations.is_group
-                ? route('chat.group', conversations)
+                ? route('chat.group', conversations.id)
                 : route('chat.user', conversations)
           }
           preserveState

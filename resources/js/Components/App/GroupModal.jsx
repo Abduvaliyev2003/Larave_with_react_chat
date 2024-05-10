@@ -69,7 +69,7 @@ const  GroupModal = ({show = false, onClose = () => {}}) => {
            <Modal show={show} onClose={closeModal}>
                 <form
                    onSubmit={createOrUpdateGroup}
-                   className="p-6 overflow-y-auto"
+                   className="p-6 overflow-y-auto bg-slate-800"
                 >
                     <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">
                          {group.id ? `Edit group ${group.name}`

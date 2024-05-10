@@ -11,6 +11,7 @@ import GroupUsersPopover from "./GroupUsersPopover";
 const ConversationHeader = ({selectedConversation}) => {
     const {emit} = useEvent();
     const authUser = usePage().props.auth.user;
+  
     const onDeleteGroup = () => {
         if (!window.confirm('Are you sure you want to delete this group?')){
            return;
@@ -18,11 +19,13 @@ const ConversationHeader = ({selectedConversation}) => {
 
         axios.delete(route('group.delete', selectedConversation.id))
             .then((res) =>{
+                emit('toast.show', res.data.message);
                 console.log(res.data)
             }).catch((err) => {
                 console.log(err)
             })
     }
+
     return (
         <>
         {
@@ -71,9 +74,7 @@ const ConversationHeader = ({selectedConversation}) => {
                                    >
                                       <button
                                          onClick={(e) =>
-                                            emit('GroupModal.show',
-                                                selectedConversation
-                                            )
+                                            emit('GroupModal.show', selectedConversation)
                                          }
                                          className="text-gray-400 hover:text-gray-200"
                                       >
