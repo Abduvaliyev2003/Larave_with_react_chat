@@ -27,8 +27,6 @@ class DeleteGroupJob implements ShouldQueue
      */
     public function handle(): void
     {
-
-
         $this->group->last_message_id = null;
         $this->group->save();
 

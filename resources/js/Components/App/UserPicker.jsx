@@ -1,6 +1,7 @@
-const { Combobox, Transition } = require("@headlessui/react");
-const { ChevronUpDownIcon, CheckIcon } = require("@heroicons/react/24/solid");
-const { useState, Fragment } = require("react");
+import { Combobox, Transition } from "@headlessui/react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/solid";
+import { Fragment, useState } from "react";
+
 
 const UserPicker = ({ value, options, onSelect }) => {
     const [selected, setSelected] = useState(value);
@@ -126,3 +127,4 @@ const UserPicker = ({ value, options, onSelect }) => {
         </>
     );
 };
+export default  UserPicker;

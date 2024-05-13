@@ -9,6 +9,7 @@ import SecondaryButton from "../SecondaryButton";
 import PrimaryButton from "../PrimaryButton";
 import { useForm, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
+import UserPicker from "./UserPicker";
 
 
 
@@ -36,7 +37,7 @@ const  GroupModal = ({show = false, onClose = () => {}}) => {
             put(route('group.update', group.id), {
                     onSuccess: () => {
                         closeModal();
-                        emit('toast.show', `Goup ${data.name} was updated`)
+                        emit('toast.show', `Group ${data.name} was updated`)
                     }
             })
             return;
@@ -44,7 +45,7 @@ const  GroupModal = ({show = false, onClose = () => {}}) => {
         post(route("group.store"), {
             onSuccess: () => {
 
-                emit('toast.show', `Goup ${data.name} was updated`)
+                emit('toast.show', `Group ${data.name} was updated`)
                 closeModal();
             }
         })
@@ -105,6 +106,26 @@ const  GroupModal = ({show = false, onClose = () => {}}) => {
                           />
 
                           <InputError className="mt-2" message={errors.name} />
+                    </div>
+                    <div className="mt-4">
+                         <InputLabel value={"Select User"} />
+                         <UserPicker
+                            value={
+                                users.filter(
+                                    (u) =>
+                                        group.owner_id !== u.id &&
+                                        data.user_ids.includes(u.id)
+                                ) || []
+                            }
+                            options={users}
+                            onSelect={(users) =>
+                                setData(
+                                    "user_ids",
+                                    users.map((u) => u.id)
+                                )
+                            }
+                         />
+                         <InputError className="mt-2" message={errors.name} />
                     </div>
 
                      <div className="mt-6 flex justify-end">

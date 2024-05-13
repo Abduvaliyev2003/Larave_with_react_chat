@@ -60,7 +60,7 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        if($group->owner_id !== auth()->id){
+        if($group->owner_id !== auth()->user()->id){
             abort(403);
         }
 
