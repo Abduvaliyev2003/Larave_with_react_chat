@@ -10,8 +10,8 @@ import GroupUsersPopover from "./GroupUsersPopover";
 
 const ConversationHeader = ({selectedConversation}) => {
     const {emit} = useEvent();
-    const authUser = usePage().props.auth.user;
-  
+    const authUser = usePage().props.auth.user.data;
+
     const onDeleteGroup = () => {
         if (!window.confirm('Are you sure you want to delete this group?')){
            return;

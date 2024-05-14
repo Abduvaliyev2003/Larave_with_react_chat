@@ -9,9 +9,9 @@ const ConversationItem = ({conversations, online = null, selectedConversation = 
 {
 
    const page = usePage();
-   const currentUser = page.props.auth.user;
+   const currentUser = page.props.auth.user.data;
    let classes = "border-transparent";
-
+    console.log(conversations);
    if(selectedConversation)
    {
       if(
@@ -85,8 +85,7 @@ const ConversationItem = ({conversations, online = null, selectedConversation = 
             }
 
           </div>
-          {
-            currentUser.is_admin && conversations.is_user && (
+          {!!currentUser.is_admin && conversations.is_user && (
                 <UserOptionsDropdown conversation={conversations} />
             )
           }

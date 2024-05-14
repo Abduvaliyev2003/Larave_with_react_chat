@@ -8,13 +8,18 @@ import { Link, usePage } from "@inertiajs/react";
 import { useEvent } from "@/Event";
 import Toast from "@/Components/App/Toast";
 import NewMessageNotification from "@/Components/App/NewMessageNotification";
+import PrimaryButton from "@/Components/PrimaryButton";
+import { UserPlusIcon } from "@heroicons/react/24/solid";
+import NewUserModal from "@/Components/App/NewUserModal";
 
 export default function Authenticated({ header, children }) {
     const page = usePage();
-    const user = page.props.auth.user;
+    const user = page.props.auth.user.data;
     const conversations = page.props.conversations;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+    const [showNewUserModal, setShowNewUserModal] = useState(false);
+
     const { emit } = useEvent();
     useEffect(() => {
         conversations?.forEach((conversation) => {
@@ -28,9 +33,6 @@ export default function Authenticated({ header, children }) {
                     .join("-")}`;
             }
             window.Echo.private(channel)
-                .error((error) => {
-                    console.error(error);
-                })
                 .listen("SocketMessage", (e) => {
 
                     const message = e.message;
@@ -52,6 +54,9 @@ export default function Authenticated({ header, children }) {
                                       " attachments"
                             }`,
                     });
+                })
+                .error((error) => {
+                    console.error(error);
                 });
 
             if(conversation.is_group) {
@@ -85,7 +90,7 @@ export default function Authenticated({ header, children }) {
     }, [conversations]);
     return (
         <>
-            <div className="min-h-screen bg-gray-100 dark:bg-slate-900 flex flex-col h-screen">
+            <div className="min-h-screen dark:bg-slate-900 flex flex-col h-screen">
                 <nav className="dark:bg-slate-800 border-b ">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-between h-16">
@@ -107,7 +112,13 @@ export default function Authenticated({ header, children }) {
                             </div>
 
                             <div className="hidden sm:flex sm:items-center sm:ms-6">
-                                <div className="ms-3 relative">
+                                <div className=" flex  ms-3 relative">
+                                    {user.is_admin && (
+                                        <PrimaryButton onClick={ev => setShowNewUserModal(true)}>
+                                            <UserPlusIcon className="h-5 w-5 mr-3" />
+                                            Add new User
+                                        </PrimaryButton>
+                                    )}
                                     <Dropdown>
                                         <Dropdown.Trigger>
                                             <span className="inline-flex rounded-md">
@@ -236,7 +247,7 @@ export default function Authenticated({ header, children }) {
                 </nav>
 
                 {header && (
-                    <header className="bg-white shadow">
+                    <header className="bg-slate-800 shadow">
                         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                             {header}
                         </div>
@@ -247,6 +258,7 @@ export default function Authenticated({ header, children }) {
             </div>
             <Toast />
             <NewMessageNotification />
+            <NewUserModal show={showNewUserModal} onClose={ev => setShowNewUserModal(false)} />
         </>
     );
 }
