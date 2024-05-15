@@ -59,8 +59,17 @@ import { useEffect, useState } from "react";
         })
     }
 
+    const messageDeleted = ({ prevMessage}) => {
+        if(!prevMessage){
+            return;
+        }
+
+        messageCreated(prevMessage);
+    }
+
     useEffect(() => {
         const offCreated = on('message.created', messageCreated);
+        const offDeleted = on("message.deleted", messageDeleted);
         const offModalShow = on('GroupModal.show', (group) => {
             setShowGroupModal(true);
         })
@@ -80,6 +89,7 @@ import { useEffect, useState } from "react";
         return () => {
             offCreated();
             offModalShow();
+            offDeleted();
             offGroupDelete();
         }
     }, [on]);

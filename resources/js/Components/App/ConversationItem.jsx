@@ -11,7 +11,7 @@ const ConversationItem = ({conversations, online = null, selectedConversation = 
    const page = usePage();
    const currentUser = page.props.auth.user.data;
    let classes = "border-transparent";
-    console.log(conversations);
+  
    if(selectedConversation)
    {
       if(

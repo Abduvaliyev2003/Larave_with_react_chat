@@ -39,7 +39,7 @@ function Home({selectedConversation = null, messages = null}) {
         }
     }
 
-    const messageDeleted = (message) => {
+    const messageDeleted = ({message}) => {
 
         if(
             selectedConversation &&
@@ -47,7 +47,7 @@ function Home({selectedConversation = null, messages = null}) {
             selectedConversation.id == message.group_id
           ) {
             setLocalMessages((prevMessages) => {
-                return prevMessages.filter((m) => m.id !== message.id);
+                return prevMessages.filter((m) => m.id != message.id);
             });
         }
 
@@ -105,7 +105,7 @@ function Home({selectedConversation = null, messages = null}) {
 
        const offcreated = on('message.created', messageCreated);
        const offDeleted = on('message.deleted', messageDeleted);
-       console.log('asdasdasd');
+
        setScrollFromBottom(0);
        setNoMoreMessages(false);
        return () =>  {

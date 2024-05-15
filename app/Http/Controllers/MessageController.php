@@ -36,7 +36,7 @@ class MessageController extends Controller
         $messages = Message::where('group_id', $group->id)
             ->latest()
             ->paginate(10);
-    
+
         return inertia('Home', [
                 'selectedConversation' => $group->toConversationArray(),
                 'messages' => MessageResource::collection($messages),
@@ -116,9 +116,27 @@ class MessageController extends Controller
        {
           return response()->json(['message' => 'Forbidden'], 403);
        }
-
+       $group = null;
+       $conversation = null;
+       if($message->group_id)
+       {
+           $group = Group::where('last_message_id', $message->id)->first();
+       }  else {
+          $conversation  = Conversation::where('last_message_id', $message->id)->first();
+       }
        $message->delete();
+       if($group)
+       {
+          $group = Group::find($group->id);
+          $lastMessage = $group->lastMessage;
+       } else if($conversation)
+       {
+          $conversation = Conversation::find($conversation->id);
+          $lastMessage =  $conversation->lastMessage;
+       }
 
-       return response()->json(['message' => 'success'], 200);
+       return response()->json(['message' =>
+       $lastMessage ? new MessageResource($lastMessage) : null
+       ], 200);
     }
 }

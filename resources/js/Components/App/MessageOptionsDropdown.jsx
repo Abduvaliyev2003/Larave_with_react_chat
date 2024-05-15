@@ -7,14 +7,14 @@ import { Fragment } from "react";
 
 
 
-const MessageOptionsDropdown = ({message})  => {
+const MessageOptionsDropdown = ({ message })  => {
     const {emit} = useEvent();
     const onMessageDelete = () => {
 
         axios.delete(route('message.destroy', message.id))
              .then((res) => {
-                 emit('messsage.deleted' , message)
-                 console.log(res.data)
+                 emit('messsage.deleted' , {message, prevMessage:res.data.message})
+
              })
              .catch((err) => {
                  console.error(err)
