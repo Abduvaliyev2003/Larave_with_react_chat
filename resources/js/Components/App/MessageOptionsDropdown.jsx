@@ -13,7 +13,7 @@ const MessageOptionsDropdown = ({ message })  => {
 
         axios.delete(route('message.destroy', message.id))
              .then((res) => {
-                 emit('messsage.deleted' , {message, prevMessage:res.data.message})
+                 emit('messsage.deleted' , {message, prevMessage: res.data.message})
 
              })
              .catch((err) => {

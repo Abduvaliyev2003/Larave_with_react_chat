@@ -40,26 +40,14 @@ function Home({selectedConversation = null, messages = null}) {
     }
 
     const messageDeleted = ({message}) => {
-
-        if(
-            selectedConversation &&
-            selectedConversation.is_group &&
-            selectedConversation.id == message.group_id
-          ) {
-            setLocalMessages((prevMessages) => {
-                return prevMessages.filter((m) => m.id != message.id);
-            });
-        }
-
-        if(
-            selectedConversation &&
-            selectedConversation.is_user &&
-            (selectedConversation.id == message.sender_id ||
-               selectedConversation.id == message.receiver_id)
-          ) {
-            setLocalMessages((prevMessages) => {
-                return prevMessages.filter((m) => m.id !== message.id);
-            });
+        if (selectedConversation) {
+            if (selectedConversation.is_group && selectedConversation.id === message.group_id) {
+                setLocalMessages((prevMessages) => prevMessages.filter((m) => m.id !== message.id));
+            } else if (selectedConversation.is_user &&
+                      (selectedConversation.id === message.sender_id ||
+                       selectedConversation.id === message.receiver_id)) {
+                setLocalMessages((prevMessages) => prevMessages.filter((m) => m.id !== message.id));
+            }
         }
     }
 
