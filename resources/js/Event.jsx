@@ -7,8 +7,9 @@ export const  EventProvider = ({children}) => {
     const [events, setEvents] = React.useState({});
 
     const emit = (name,data) => {
-        console.log('asd');
+      
         if(events[name]) {
+
             for(let cb of events[name]){
                 cb(data);
             }

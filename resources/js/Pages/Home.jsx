@@ -40,6 +40,7 @@ function Home({selectedConversation = null, messages = null}) {
     }
 
     const messageDeleted = ({message}) => {
+        
         if (selectedConversation) {
             if (selectedConversation.is_group && selectedConversation.id === message.group_id) {
                 setLocalMessages((prevMessages) => prevMessages.filter((m) => m.id !== message.id));

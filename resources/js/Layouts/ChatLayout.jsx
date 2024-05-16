@@ -36,6 +36,7 @@ import { useEffect, useState } from "react";
     {
         setLocalConversations((oldUsers) => {
             return oldUsers.map((us) => {
+
                 if(
                     message.receiver_id &&
                     !us.is_group &&
@@ -48,8 +49,9 @@ import { useEffect, useState } from "react";
                 if(
                     message.group_id &&
                     us.is_group &&
-                    us.id == message.group_id_id
+                    us.id == message.group_id
                 ) {
+                    console.log(us.is_group)
                     us.last_message = message.message;
                     us.last_message_date = message.created_at;
                     return us;
@@ -59,7 +61,7 @@ import { useEffect, useState } from "react";
         })
     }
 
-    const messageDeleted = ({ prevMessage}) => {
+    const messageDeleted = ({prevMessage}) => {
         if(!prevMessage){
             return;
         }
